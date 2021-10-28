@@ -11,7 +11,7 @@ import (
 func RegisterHandler(s store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user *model.User
-		if err := json.NewDecoder(r.Body).Decode(user); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 			service.Error(w, http.StatusBadRequest, err)
 			return
 		}

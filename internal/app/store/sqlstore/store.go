@@ -3,6 +3,8 @@ package sqlstore
 import (
 	"database/sql"
 	"gophermart/internal/app/store"
+
+	_ "github.com/lib/pq"
 )
 
 type Store struct {
@@ -10,8 +12,8 @@ type Store struct {
 	userRepository *UserRepository
 }
 
-func New(database *sql.DB) Store {
-	return Store{
+func New(database *sql.DB) *Store {
+	return &Store{
 		database: database,
 	}
 }

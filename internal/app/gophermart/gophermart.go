@@ -2,7 +2,7 @@ package gophermart
 
 import (
 	"database/sql"
-	"gophermart/internal/app/store"
+	store "gophermart/internal/app/store/sqlstore"
 	"net/http"
 )
 

@@ -8,3 +8,7 @@ GET /api/user/orders — получение списка загруженных 
 GET /api/user/balance — получение текущего баланса счёта баллов лояльности пользователя;
 POST /api/user/balance/withdraw — запрос на списание баллов с накопительного счёта в счёт оплаты нового заказа;
 GET /api/user/balance/withdrawals — получение информации о выводе средств с накопительного счёта пользователем.
+
+For start
+start migrations: 
+> migrate -path migrations -database "postgres://localhost/gophermart?sslmode=disable" up
