@@ -19,3 +19,7 @@ func hashPassword(u *model.User) error {
 	u.Password = hex.EncodeToString([]byte(u.Password))
 	return nil
 }
+
+func equal(f *model.User, s *model.User) bool {
+	return f.Login == s.Login && f.Password == s.Password
+}

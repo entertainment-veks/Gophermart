@@ -30,4 +30,5 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) configureRouter() {
 	s.router.HandleFunc("/api/user/register", user.RegisterHandler(s.store)).Methods(http.MethodPost)
+	s.router.HandleFunc("/api/user/login", user.LoginHandler(s.store)).Methods(http.MethodPost)
 }
