@@ -18,19 +18,25 @@ func RegisterHandler(s store.Store) http.HandlerFunc {
 
 		if err := validate(user); err != nil {
 			service.Error(w, http.StatusBadRequest, err)
+			return
 		}
 
 		if err := hashPassword(user); err != nil {
 			service.Error(w, http.StatusInternalServerError, err)
+			return
 		}
 
-		switch err := s.User().Create(user); err {
-		case store.ErrUserAlreadyExist:
-			service.Error(w, http.StatusConflict, err)
-		case nil: //no errs
-			authUser(w, user.Login)
-		default: //any another error
+		err := s.User().Create(user)
+		if err != nil && err != store.ErrUserAlreadyExist {
 			service.Error(w, http.StatusInternalServerError, err)
+			return
 		}
+		if err == store.ErrUserAlreadyExist {
+			service.Error(w, http.StatusConflict, err)
+			return
+		}
+
+		authUser(w, user.Login)
+		service.Respond(w, http.StatusOK, "success")
 	}
 }

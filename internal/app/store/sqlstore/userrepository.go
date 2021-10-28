@@ -17,12 +17,32 @@ func (r *UserRepository) Create(u *model.User) error {
 		u.Password,
 	).Scan(&u.ID)
 
-	switch err {
-	case sql.ErrNoRows:
-		return store.ErrUserAlreadyExist
-	case nil:
-		return nil
-	default:
+	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
+	if err == sql.ErrNoRows {
+		return store.ErrUserAlreadyExist
+	}
+	return nil
+}
+
+func (r *UserRepository) GetByLogin(login string) (*model.User, error) {
+	u := &model.User{}
+	err := r.store.database.QueryRow(
+		"SELECT id, login, password FROM users WHERE login = $1",
+		login,
+	).Scan(
+		&u.ID,
+		&u.Login,
+		&u.Password,
+	)
+
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	if err == sql.ErrNoRows {
+		return nil, store.ErrUserNotFound
+	}
+
+	return u, nil
 }
