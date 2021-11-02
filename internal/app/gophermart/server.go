@@ -35,6 +35,7 @@ func (s *server) configureRouter() {
 
 	private := s.router.NewRoute().Subrouter()
 	private.Use(user.AuthMiddleware)
-	private.HandleFunc("/api/user/orders", orders.OrdersHandler(s.store)).Methods(http.MethodPost)
+	private.HandleFunc("/api/user/orders", orders.OrdersPostHandler(s.store)).Methods(http.MethodPost)
+	private.HandleFunc("/api/user/orders", orders.OrdersGetHandler(s.store)).Methods(http.MethodGet)
 
 }

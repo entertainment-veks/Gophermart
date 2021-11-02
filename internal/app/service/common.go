@@ -17,10 +17,10 @@ func Respond(w http.ResponseWriter, code int, data string) {
 }
 
 func RespondJSON(w http.ResponseWriter, statusCode int, body interface{}) {
+	w.Header().Add("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(body); err != nil {
 		Error(w, http.StatusInternalServerError, err)
 		return
 	}
-	w.Header().Add("Content-Type", "application/json")
 	Respond(w, statusCode, "")
 }

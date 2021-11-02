@@ -10,4 +10,5 @@ type UserRepository interface {
 type OrdersRepository interface {
 	Create(*model.Order) error
 	GetOwnerByNumber(int) (string, error)
+	GetAllByUser(string) ([]*model.Order, error)
 }

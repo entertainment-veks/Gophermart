@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func OrdersHandler(s store.Store) http.HandlerFunc {
+func OrdersPostHandler(s store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orderNumber, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -23,11 +23,11 @@ func OrdersHandler(s store.Store) http.HandlerFunc {
 			return
 		}
 
-		cookie, err := r.Cookie(user.AuthCookieKey)
+		authCookie, err := r.Cookie(user.AuthCookieKey)
 		if err != nil {
 			service.Error(w, http.StatusInternalServerError, err) //here user cookie must exist
 		}
-		currentOwner := cookie.Value
+		currentOwner := authCookie.Value
 
 		oldOwner, err := s.Orders().GetOwnerByNumber(intedNumber)
 		if err != nil && err != store.ErrOrderNotExist {
