@@ -5,6 +5,7 @@ import (
 	"gophermart/internal/app/service/user"
 	"gophermart/internal/app/store"
 	"net/http"
+	"sort"
 )
 
 func OrdersGetHandler(s store.Store) http.HandlerFunc {
@@ -24,11 +25,9 @@ func OrdersGetHandler(s store.Store) http.HandlerFunc {
 			return
 		}
 
-		for _, currentOrder := range orders {
-			if currentOrder.AccrualFromDB.Valid {
-				currentOrder.Accrual = int(currentOrder.AccrualFromDB.Int16)
-			}
-		}
+		sort.Slice(orders, func(i, j int) bool {
+			return orders[i].Uploaded_at.Before(orders[j].Uploaded_at)
+		})
 
 		service.RespondJSON(w, http.StatusOK, orders)
 	}

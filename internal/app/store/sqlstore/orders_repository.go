@@ -60,7 +60,7 @@ func (r *OrdersRepository) GetAllByUser(login string) ([]*model.Order, error) {
 		err := rows.Scan(
 			&o.Number,
 			&o.Status,
-			&o.AccrualFromDB,
+			&o.Accrual,
 			&o.Uploaded_at,
 		)
 		if err != nil {
