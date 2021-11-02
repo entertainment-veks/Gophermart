@@ -1,6 +1,7 @@
 package gophermart
 
 import (
+	"gophermart/internal/app/service/orders"
 	"gophermart/internal/app/service/user"
 	"gophermart/internal/app/store"
 	"net/http"
@@ -31,4 +32,9 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (s *server) configureRouter() {
 	s.router.HandleFunc("/api/user/register", user.RegisterHandler(s.store)).Methods(http.MethodPost)
 	s.router.HandleFunc("/api/user/login", user.LoginHandler(s.store)).Methods(http.MethodPost)
+
+	private := s.router.NewRoute().Subrouter()
+	private.Use(user.AuthMiddleware)
+	private.HandleFunc("/api/user/orders", orders.OrdersHandler(s.store)).Methods(http.MethodPost)
+
 }

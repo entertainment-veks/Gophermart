@@ -3,15 +3,18 @@ package user
 import "net/http"
 
 const (
-	authCookieKey = "gophermart-login"
+	AuthCookieKey = "gophermart_login"
 )
 
 func authUser(w http.ResponseWriter, login string) {
 	cookie := &http.Cookie{
-		Name:  authCookieKey,
+		Name:  AuthCookieKey,
 		Value: login,
 	}
 	http.SetCookie(w, cookie)
 }
 
-func isUserAuthed() {} //todo
+func isUserAuthed(r *http.Request) bool {
+	_, err := r.Cookie(AuthCookieKey)
+	return err == nil
+}
