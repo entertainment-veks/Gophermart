@@ -1,6 +1,7 @@
 package gophermart
 
 import (
+	"gophermart/internal/app/service/balance"
 	"gophermart/internal/app/service/orders"
 	"gophermart/internal/app/service/user"
 	"gophermart/internal/app/store"
@@ -38,4 +39,7 @@ func (s *server) configureRouter() {
 	private.HandleFunc("/api/user/orders", orders.OrdersPostHandler(s.store)).Methods(http.MethodPost)
 	private.HandleFunc("/api/user/orders", orders.OrdersGetHandler(s.store)).Methods(http.MethodGet)
 
+	private.HandleFunc("/api/user/balance", balance.BalanceHandler(s.store)).Methods(http.MethodGet)
+	private.HandleFunc("/api/user/balance/withdraw", balance.WithdrawPostHandler(s.store)).Methods(http.MethodPost)
+	private.HandleFunc("/api/user/balance/withdrawals", balance.WithdrawGetHandler(s.store)).Methods(http.MethodGet)
 }
