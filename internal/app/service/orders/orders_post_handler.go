@@ -23,11 +23,10 @@ func OrdersPostHandler(s store.Store) http.HandlerFunc {
 			return
 		}
 
-		authCookie, err := r.Cookie(user.AuthCookieKey)
+		currentOwner, err := user.GetLogin(r)
 		if err != nil {
-			service.Error(w, http.StatusInternalServerError, err) //here user cookie must exist
+			service.Error(w, http.StatusInternalServerError, err)
 		}
-		currentOwner := authCookie.Value
 
 		oldOwner, err := s.Orders().GetOwnerByNumber(intedNumber)
 		if err != nil && err != store.ErrOrderNotExist {
