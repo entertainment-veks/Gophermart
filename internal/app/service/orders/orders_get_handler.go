@@ -10,12 +10,12 @@ import (
 
 func OrdersGetHandler(s store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		authCookie, err := r.Cookie(user.AuthCookieKey)
+		userLogin, err := user.GetLogin(r)
 		if err != nil {
-			service.Error(w, http.StatusInternalServerError, err) //here user cookie must exist
+			service.Error(w, http.StatusInternalServerError, err)
 		}
 
-		orders, err := s.Orders().GetAllByUser(authCookie.Value)
+		orders, err := s.Orders().GetAllByUser(userLogin)
 		if err != nil && err != store.ErrOrdersNotFound {
 			service.Error(w, http.StatusInternalServerError, err)
 			return
