@@ -2,7 +2,12 @@ package service
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
+)
+
+var (
+	ErrUnauthorized = errors.New("user is unauthorized")
 )
 
 func Error(w http.ResponseWriter, code int, err error) {
