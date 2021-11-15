@@ -25,7 +25,7 @@ func (r *OrdersRepository) Create(o *model.Order) error {
 	return nil
 }
 
-func (r *OrdersRepository) GetOwnerByNumber(number int) (string, error) {
+func (r *OrdersRepository) GetOwnerByNumber(number string) (string, error) {
 	var owner *string
 	err := r.store.database.QueryRow(
 		"SELECT owner FROM orders WHERE number = $1",

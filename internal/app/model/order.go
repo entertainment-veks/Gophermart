@@ -6,7 +6,7 @@ import (
 
 type Order struct {
 	ID          int       `json:"-"`
-	Number      int       `json:"number"`
+	Number      string    `json:"number"`
 	Status      string    `json:"status"`
 	Accrual     *int      `json:"accrual,omitempty"` //nullable
 	Owner       string    `json:"-"`

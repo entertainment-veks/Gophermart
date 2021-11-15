@@ -13,11 +13,14 @@ const (
 	StatusProcessed  = "PROCESSED"
 )
 
-func bytesToInt(input []byte) (int, error) {
-	stringed := string(input)
-	return strconv.Atoi(stringed)
+func stringToInt(input string) (int, error) {
+	return strconv.Atoi(input)
 }
 
-func isValid(input int) bool {
-	return luhn.Valid(input)
+func IsValid(input string) bool {
+	inted, err := stringToInt(input)
+	if err != nil {
+		return false
+	}
+	return luhn.Valid(inted)
 }
