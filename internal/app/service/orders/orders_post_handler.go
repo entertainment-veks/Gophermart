@@ -11,14 +11,15 @@ import (
 
 func OrdersPostHandler(s store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		orderNumber, err := ioutil.ReadAll(r.Body)
+		input, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			service.Error(w, http.StatusBadRequest, err)
 			return
 		}
 
-		intedNumber, err := bytesToInt(orderNumber)
-		if err != nil || !isValid(intedNumber) {
+		orderNumber := string(input)
+
+		if err != nil || !IsValid(orderNumber) {
 			service.Respond(w, http.StatusUnprocessableEntity, "invalid order code")
 			return
 		}
@@ -26,16 +27,17 @@ func OrdersPostHandler(s store.Store) http.HandlerFunc {
 		currentOwner, err := user.GetLogin(r)
 		if err != nil {
 			service.Error(w, http.StatusInternalServerError, err)
+			return
 		}
 
-		oldOwner, err := s.Orders().GetOwnerByNumber(intedNumber)
+		oldOwner, err := s.Orders().GetOwnerByNumber(orderNumber)
 		if err != nil && err != store.ErrOrderNotExist {
 			service.Error(w, http.StatusInternalServerError, err)
 			return
 		}
 		if err == store.ErrOrderNotExist {
 			order := &model.Order{
-				Number: intedNumber,
+				Number: orderNumber,
 				Status: StatusNew,
 				Owner:  currentOwner,
 			}
@@ -43,6 +45,7 @@ func OrdersPostHandler(s store.Store) http.HandlerFunc {
 			err := s.Orders().Create(order)
 			if err != nil {
 				service.Error(w, http.StatusInternalServerError, err)
+				return
 			}
 
 			go calculateBonuces()

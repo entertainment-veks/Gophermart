@@ -9,6 +9,13 @@ type UserRepository interface {
 
 type OrdersRepository interface {
 	Create(*model.Order) error
-	GetOwnerByNumber(int) (string, error)
+	GetOwnerByNumber(string) (string, error)
 	GetAllByUser(string) ([]*model.Order, error)
+}
+
+type OperationsRepository interface {
+	Create(*model.Operation) error
+	GetBalance(string) (int, error)
+	GetWithdrawCount(string) (int, error)
+	GetAll(string) ([]*model.Operation, error)
 }
