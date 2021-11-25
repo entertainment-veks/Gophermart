@@ -1,7 +1,7 @@
 package user
 
 import (
-	"gophermart/internal/app/service"
+	"gophermart/internal/app/handler"
 	"net/http"
 )
 
@@ -11,6 +11,6 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
-		service.Respond(w, http.StatusUnauthorized, "user is unauthorized")
+		handler.Respond(w, http.StatusUnauthorized, "user is unauthorized")
 	})
 }

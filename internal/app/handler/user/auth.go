@@ -1,7 +1,7 @@
 package user
 
 import (
-	"gophermart/internal/app/service"
+	"gophermart/internal/app/handler"
 	"math/rand"
 	"net/http"
 	"time"
@@ -52,7 +52,7 @@ func GetLogin(r *http.Request) (string, error) {
 		cookie, _ := r.Cookie(authCookieKey)
 		return sessions[cookie.Value].Login, nil
 	}
-	return "", service.ErrUnauthorized
+	return "", handler.ErrUnauthorized
 }
 
 func generateSessionID() string {

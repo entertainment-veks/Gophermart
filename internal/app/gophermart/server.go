@@ -1,9 +1,9 @@
 package gophermart
 
 import (
+	user2 "gophermart/internal/app/handler/user" //todo change to 'user'
 	"gophermart/internal/app/service/balance"
 	"gophermart/internal/app/service/orders"
-	"gophermart/internal/app/service/user"
 	"gophermart/internal/app/store"
 	"net/http"
 
@@ -31,11 +31,11 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) configureRouter(accuralSystemAddress string) {
-	s.router.HandleFunc("/api/user/register", user.RegisterHandler(s.store)).Methods(http.MethodPost)
-	s.router.HandleFunc("/api/user/login", user.LoginHandler(s.store)).Methods(http.MethodPost)
+	s.router.HandleFunc("/api/user/register", user2.RegisterHandler(s.store)).Methods(http.MethodPost)
+	s.router.HandleFunc("/api/user/login", user2.LoginHandler(s.store)).Methods(http.MethodPost)
 
 	private := s.router.NewRoute().Subrouter()
-	private.Use(user.AuthMiddleware)
+	private.Use(user2.AuthMiddleware)
 	private.HandleFunc("/api/user/orders", orders.OrdersPostHandler(s.store, accuralSystemAddress)).Methods(http.MethodPost)
 	private.HandleFunc("/api/user/orders", orders.OrdersGetHandler(s.store)).Methods(http.MethodGet)
 

@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"encoding/json"
@@ -7,7 +7,10 @@ import (
 )
 
 var (
-	ErrUnauthorized = errors.New("user is unauthorized")
+	ErrUnauthorized   = errors.New("user is unauthorized")
+	ErrBadRequest     = errors.New("bad request")
+	ErrInternalServer = errors.New("internal server error")
+	ErrConflict       = errors.New("conflict")
 )
 
 func Error(w http.ResponseWriter, code int, err error) {
