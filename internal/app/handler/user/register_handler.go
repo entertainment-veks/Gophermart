@@ -22,14 +22,12 @@ func RegisterHandler(s store.Store) http.HandlerFunc {
 			switch {
 			case errors.Is(err, handler.ErrBadRequest):
 				handler.Error(w, http.StatusBadRequest, errors.Unwrap(err))
-				break
 			case errors.Is(err, handler.ErrInternalServer):
 				handler.Error(w, http.StatusInternalServerError, errors.Unwrap(err))
-				break
 			case errors.Is(err, handler.ErrConflict):
 				handler.Error(w, http.StatusConflict, errors.Unwrap(err))
-				break
 			}
+			return
 		}
 
 		authUser(w, u.Login)

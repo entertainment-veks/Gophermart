@@ -23,14 +23,12 @@ func LoginHandler(s store.Store) http.HandlerFunc {
 			switch {
 			case errors.Is(err, handler.ErrBadRequest):
 				handler.Error(w, http.StatusBadRequest, errors.Unwrap(err))
-				break
 			case errors.Is(err, handler.ErrInternalServer):
 				handler.Error(w, http.StatusInternalServerError, errors.Unwrap(err))
-				break
 			case errors.Is(err, handler.ErrUnauthorized):
 				handler.Error(w, http.StatusUnauthorized, errors.Unwrap(err))
-				break
 			}
+			return
 		}
 
 		if ok {
