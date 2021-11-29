@@ -11,6 +11,7 @@ var (
 	ErrBadRequest     = errors.New("bad request")
 	ErrInternalServer = errors.New("internal server error")
 	ErrConflict       = errors.New("conflict")
+	ErrNoContent      = errors.New("no content")
 )
 
 func Error(w http.ResponseWriter, code int, err error) {

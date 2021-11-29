@@ -6,6 +6,7 @@ import (
 	"gophermart/internal/app/handler"
 	"gophermart/internal/app/handler/user"
 	"gophermart/internal/app/model"
+	"gophermart/internal/app/service/orders"
 	"gophermart/internal/app/store"
 	"io/ioutil"
 	"net/http"
@@ -21,7 +22,7 @@ func OrdersPostHandler(s store.Store, accuralSystemAddress string) http.HandlerF
 
 		orderNumber := string(input)
 
-		if err != nil || !IsValid(orderNumber) {
+		if err != nil || !orders.IsValid(orderNumber) {
 			handler.Respond(w, http.StatusUnprocessableEntity, "invalid order code")
 			return
 		}
@@ -40,7 +41,7 @@ func OrdersPostHandler(s store.Store, accuralSystemAddress string) http.HandlerF
 		if err == store.ErrOrderNotExist {
 			order := &model.Order{
 				Number: orderNumber,
-				Status: StatusNew,
+				Status: orders.StatusNew,
 				Owner:  currentOwner,
 			}
 

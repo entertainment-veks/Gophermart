@@ -1,9 +1,9 @@
 package gophermart
 
 import (
+	orders2 "gophermart/internal/app/handler/orders"
 	user2 "gophermart/internal/app/handler/user" //todo change to 'user'
 	"gophermart/internal/app/service/balance"
-	"gophermart/internal/app/service/orders"
 	"gophermart/internal/app/store"
 	"net/http"
 
@@ -36,8 +36,8 @@ func (s *server) configureRouter(accuralSystemAddress string) {
 
 	private := s.router.NewRoute().Subrouter()
 	private.Use(user2.AuthMiddleware)
-	private.HandleFunc("/api/user/orders", orders.OrdersPostHandler(s.store, accuralSystemAddress)).Methods(http.MethodPost)
-	private.HandleFunc("/api/user/orders", orders.OrdersGetHandler(s.store)).Methods(http.MethodGet)
+	private.HandleFunc("/api/user/orders", orders2.OrdersPostHandler(s.store, accuralSystemAddress)).Methods(http.MethodPost)
+	private.HandleFunc("/api/user/orders", orders2.OrdersGetHandler(s.store)).Methods(http.MethodGet)
 
 	private.HandleFunc("/api/user/balance", balance.BalanceHandler(s.store)).Methods(http.MethodGet)
 	private.HandleFunc("/api/user/balance/withdraw", balance.WithdrawPostHandler(s.store)).Methods(http.MethodPost)
