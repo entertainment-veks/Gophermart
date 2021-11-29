@@ -16,7 +16,7 @@ func Start(config *config) error {
 
 	defer database.Close()
 	store := store.New(database)
-	server := newServer(store)
+	server := newServer(store, config.AccuralSystemAddress)
 
 	return http.ListenAndServe(config.RunAddress, server)
 }

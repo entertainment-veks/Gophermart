@@ -79,3 +79,18 @@ func (r *OrdersRepository) GetAllByUser(login string) ([]*model.Order, error) {
 
 	return orders, nil
 }
+
+func (r *OrdersRepository) UpdateStatus(o *model.Order) error {
+	err := r.store.database.QueryRow(
+		"UPDATE orders SET status = $1, accrual = $2 WHERE number = $3",
+		o.Status,
+		o.Accrual,
+		o.Number,
+	).Scan(&o.ID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

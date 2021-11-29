@@ -1,6 +1,8 @@
 package orders
 
 import (
+	"encoding/json"
+	"fmt"
 	"gophermart/internal/app/model"
 	"gophermart/internal/app/service"
 	"gophermart/internal/app/service/user"
@@ -9,7 +11,7 @@ import (
 	"net/http"
 )
 
-func OrdersPostHandler(s store.Store) http.HandlerFunc {
+func OrdersPostHandler(s store.Store, accuralSystemAddress string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		input, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -48,7 +50,7 @@ func OrdersPostHandler(s store.Store) http.HandlerFunc {
 				return
 			}
 
-			go calculateBonuces()
+			go calculateBonuces(s, accuralSystemAddress, orderNumber)
 
 			service.Respond(w, http.StatusAccepted, "success")
 			return
@@ -63,6 +65,24 @@ func OrdersPostHandler(s store.Store) http.HandlerFunc {
 	}
 }
 
-func calculateBonuces() {
-	//will be implemented when loyalty system will be provided
+func calculateBonuces(s store.Store, accuralSystemAddress string, orderNumber string) {
+	link := fmt.Sprintf("%s/api/orders/%s", accuralSystemAddress, orderNumber)
+	req, err := http.NewRequest(http.MethodGet, link, nil)
+	if err != nil {
+		return
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return
+	}
+
+	var order *model.Order
+	if err := json.NewDecoder(resp.Body).Decode(&order); err != nil {
+		return
+	}
+
+	if err := s.Orders().UpdateStatus(order); err != nil {
+		return
+	}
 }

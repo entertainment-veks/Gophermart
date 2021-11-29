@@ -11,6 +11,7 @@ type OrdersRepository interface {
 	Create(*model.Order) error
 	GetOwnerByNumber(string) (string, error)
 	GetAllByUser(string) ([]*model.Order, error)
+	UpdateStatus(*model.Order) error
 }
 
 type OperationsRepository interface {
