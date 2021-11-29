@@ -1,8 +1,8 @@
 package gophermart
 
 import (
-	orders2 "gophermart/internal/app/handler/orders"
-	user2 "gophermart/internal/app/handler/user" //todo change to 'user'
+	orders2 "gophermart/internal/app/handler/orders" //todo change to 'orders'
+	user2 "gophermart/internal/app/handler/user"     //todo change to 'user'
 	"gophermart/internal/app/service/balance"
 	"gophermart/internal/app/store"
 	"net/http"
